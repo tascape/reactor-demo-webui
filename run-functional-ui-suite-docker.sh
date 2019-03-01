@@ -5,6 +5,7 @@ exit_value=0
 log_dir="${HOME}/.reactor/logs"
 mkdir -p ${log_dir}/logs
 
+docker pull tascape/reactor-demo-webui:latest
 docker run --rm --privileged -it --shm-size=2g \
   --name "$exec_id" \
   --mount type=bind,source="${log_dir}",target="/home/ubuntu/.reactor/logs" \
