@@ -2,12 +2,12 @@
 
 exec_id=rx_$(uuidgen | tr - _)
 exit_value=0
-reactor_dir="${HOME}/.reactor"
+log_dir="${HOME}/.reactor/logs"
 mkdir -p ${log_dir}/logs
 
-docker run --rm --privileged -it \
+docker run --rm --privileged -it --shm-size=2g \
   --name "$exec_id" \
-  --mount type=bind,source="${reactor_dir}",target="/home/ubuntu/.reactor" \
+  --mount type=bind,source="${log_dir}",target="/home/ubuntu/.reactor/logs" \
   -e exec_id=$exec_id \
   tascape/reactor-demo-webui:latest \
   /home/ubuntu/run-functional-ui-suite.sh || exit_value=$?
