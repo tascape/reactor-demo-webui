@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.tascape</groupId>
+    <artifactId>reactor-demo-webui</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>reactor-demo-webui</name>
+    <description>selenium webdriver based ui tests</description>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <dockerfile.skip>true</dockerfile.skip>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skipDocker>${dockerfile.skip}</skipDocker>
+                    <imageName>${project.artifactId}</imageName>
+                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/target</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>**/*.jar</include>
+                        </resource>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.basedir}</directory>
+                            <include>run-functional-ui-suite.sh</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.tascape</groupId>
+            <artifactId>reactor</artifactId>
+            <version>[1.2.39, 1.3.0)</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tascape</groupId>
+            <artifactId>reactor-x-webui</artifactId>
+            <version>[1.5.5, 1.6.0)</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.tascape</groupId>
+                    <artifactId>reactor</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+</project>
