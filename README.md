@@ -28,3 +28,6 @@ or ~/.reactor/logs/
 ## run with docker
 
     ./run-functional-ui-suite-docker.sh
+  or, if you don't want to even clone this repo     
+
+    curl https://raw.githubusercontent.com/tascape/reactor-demo-webui/master/run-functional-ui-suite-docker.sh | bash
