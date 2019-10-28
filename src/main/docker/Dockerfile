@@ -2,17 +2,17 @@ FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     openjdk-8-jre \
-	apt-transport-https \
-	ca-certificates \
+    apt-transport-https \
+    ca-certificates \
     uuid-runtime \
-	curl \
+    curl \
     unzip \
-	gnupg \
-	sudo \
+    gnupg \
+    sudo \
     xvfb
 
 RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-	echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+    echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update && apt-get install --no-install-recommends -y google-chrome-stable
 
 RUN useradd -d /home/ubuntu -ms /bin/bash -g root -G sudo -p ubuntu ubuntu
